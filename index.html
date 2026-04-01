@@ -3,129 +3,389 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Billing System</title>
+    <title>iDXD - Billing System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/normalize.css" layer="normalize">
     <style>
-        body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 20px;
-}
+        @layer normalize, base, cards;
 
-.container {
-    max-width: 600px;
-    margin: auto;
-    background: white;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
+        /* Base Styles */
+        @layer base {
+            :root {
+                --font-size-min: 16;
+                --font-size-max: 20;
+                --gradient-angle: 0turn;
+            }
 
-h1, h2, h3 {
-    text-align: center;
-    color: #333;
-}
+            html {
+                color-scheme: light dark;
+                scroll-behavior: smooth;
+            }
 
-form {
-    display: flex;
-    flex-direction: column;
-}
+            body {
+                font-family: 'Comfortaa', sans-serif;
+                background: #141819;
+                color: #d5cec0;
+                margin: 0;
+                padding: 20px;
+                min-height: 100vh;
+                display: grid;
+                place-items: center;
+            }
 
-input {
-    margin: 10px 0;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-}
+            body::before {
+                --size: 45px;
+                --line: color-mix(in oklch, #584827, transparent 70%);
+                content: '';
+                height: 100vh;
+                width: 100vw;
+                position: fixed;
+                background: linear-gradient(90deg, var(--line) 1px, transparent 1px var(--size)) 50% 50% / var(--size) var(--size),
+                            linear-gradient(var(--line) 1px, transparent 1px var(--size)) 50% 50% / var(--size) var(--size);
+                -webkit-mask: linear-gradient(-20deg, transparent 50%, white);
+                        mask: linear-gradient(-20deg, transparent 50%, white);
+                top: 0;
+                transform-style: flat;
+                pointer-events: none;
+                z-index: -1;
+            }
 
-button {
-    padding: 10px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-top: 10px;
-}
+            .container {
+                max-width: 700px;
+                margin: auto;
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+            }
 
-button:hover {
-    background-color: #218838;
-}
+            h1, h2, h3 {
+                text-align: center;
+                color: #f9de90;
+                margin: 0;
+            }
+        }
 
-#bill {
-    margin-top: 20px;
-}
+        /* Card Styles */
+        @layer cards {
+            @property --gradient-angle {
+                syntax: "<angle>";
+                initial-value: 0turn;
+                inherits: false;
+            }
 
-table {
-    width: 100%;
-    margin-top: 20px;
-    border-collapse: collapse;
-}
+            .card {
+                animation: 2s gradient-angle infinite linear;
+                border: 2px solid transparent;
+                background-image: linear-gradient(#2d230f, #584827),
+                                  conic-gradient(from var(--gradient-angle), #584827 0%, #c7a03c 37%, #f9de90 30%, #c7a03c 33%, #584827 40%);
+                background-clip: padding-box, border-box;
+                background-origin: padding-box, border-box;
+                padding: 20px;
+                color: #d5cec0;
+                border-radius: 20px;
+                transition: transform 0.3s ease;
+            }
 
-th, td {
-    padding: 10px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
+            .card:hover {
+                transform: translateY(-10px);
+            }
 
-th {
-    background-color: #f2f2f2;
-}
+            @keyframes gradient-angle {
+                to {
+                    --gradient-angle: 1turn;
+                }
+            }
 
-#total-amount {
-    text-align: right;
-    font-weight: bold;
-    font-size: 18px;
-}
+            /* Input Section (Form) */
+            #form-card form {
+                display: grid;
+                gap: 10px;
+            }
 
-#print-button, #save-button, #reset-button {
-    background-color: #007bff;
-    margin-top: 10px;
-}
+            label {
+                margin: 5px 0 2px;
+                font-weight: bold;
+                color: #f9de90;
+                font-size: 14px;
+            }
 
-#print-button:hover, #save-button:hover, #reset-button:hover {
-    background-color: #0056b3;
-}
+            input {
+                padding: 10px;
+                border: 1px solid #c7a03c;
+                border-radius: 5px;
+                font-size: 16px;
+                background: #2d230f;
+                color: #d5cec0;
+                transition: border-color 0.3s ease;
+            }
 
-#save-button {
-    background-color: #28a745;
-}
+            input:focus {
+                border-color: #f9de90;
+                outline: none;
+            }
 
-#save-button:hover {
-    background-color: #218838;
-}
+            input:invalid:focus {
+                border-color: #dc3545;
+            }
 
-#reset-button {
-    background-color: #dc3545;
-}
+            button {
+                padding: 10px;
+                background-color: #c7a03c;
+                color: #2d230f;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 16px;
+                transition: background-color 0.3s ease;
+            }
 
-#reset-button:hover {
-    background-color: #c82333;
-}
+            button:hover {
+                background-color: #f9de90;
+            }
+
+            /* Bill Section */
+            #bill {
+                display: grid;
+                gap: 15px;
+            }
+
+            #bill h2 {
+                font-size: 24px;
+                font-weight: 700;
+                background: linear-gradient(90deg, #584827, #c7a03c);
+                -webkit-background-clip: text;
+                background-clip: text;
+                color: transparent;
+                padding: 5px 0;
+            }
+
+            #bill .bill-details {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+                font-size: 14px;
+                background: #2d230f;
+                padding: 10px;
+                border-radius: 5px;
+                border: 1px solid #584827;
+            }
+
+            #bill .bill-details p {
+                margin: 5px 0;
+            }
+
+            #bill .bill-details span {
+                font-weight: 700;
+                color: #f9de90;
+            }
+
+            #bill table {
+                width: 100%;
+                border-collapse: separate;
+                border-spacing: 0;
+                background: #2d230f;
+                border-radius: 10px;
+                overflow: hidden;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            }
+
+            #bill th, #bill td {
+                padding: 15px;
+                text-align: left;
+                border-bottom: 1px solid #584827;
+            }
+
+            #bill th {
+                background-color: #584827;
+                color: #f9de90;
+                font-weight: 700;
+            }
+
+            #bill tr:last-child td {
+                border-bottom: none;
+            }
+
+            #bill tr:hover {
+                background-color: #3b2c17;
+            }
+
+            #bill .action-btn {
+                padding: 5px 10px;
+                margin: 0 5px;
+                font-size: 14px;
+            }
+
+            #bill .edit-btn {
+                background-color: #ffc107;
+            }
+
+            #bill .edit-btn:hover {
+                background-color: #e0a800;
+            }
+
+            #bill .delete-btn {
+                background-color: #dc3545;
+            }
+
+            #bill .delete-btn:hover {
+                background-color: #c82333;
+            }
+
+            #bill #total-amount {
+                text-align: right;
+                font-weight: 700;
+                font-size: 20px;
+                color: #f9de90;
+                padding: 10px 0;
+            }
+
+            #bill .bill-actions {
+                display: flex;
+                justify-content: space-between;
+                gap: 10px;
+                flex-wrap: wrap;
+            }
+
+            #bill .bill-actions button {
+                flex: 1;
+                min-width: 100px;
+            }
+
+            #bill #print-button, #bill #reset-button, #bill #edit-customer-btn {
+                background-color: #584827;
+            }
+
+            #bill #print-button:hover, #bill #reset-button:hover, #bill #edit-customer-btn:hover {
+                background-color: #c7a03c;
+            }
+
+            #bill #save-button {
+                background-color: #c7a03c;
+            }
+
+            #bill #save-button:hover {
+                background-color: #f9de90;
+            }
+
+            #bill #reset-button {
+                background-color: #dc3545;
+            }
+
+            #bill #reset-button:hover {
+                background-color: #c82333;
+            }
+
+            #bill .message {
+                text-align: center;
+                color: #f9de90;
+                font-size: 14px;
+            }
+
+            @media print {
+                body {
+                    background: white;
+                    padding: 0;
+                    margin: 0;
+                }
+
+                body::before {
+                    display: none;
+                }
+
+                .container {
+                    padding: 0;
+                    margin: 0;
+                    max-width: 100%;
+                }
+
+                h1, #form-card, #bill-form, #print-button, #save-button, #reset-button, #edit-customer-btn, .action-btn, .message {
+                    display: none;
+                }
+
+                #bill {
+                    display: block;
+                    margin: 0;
+                    padding: 10px;
+                    border: 1px solid #ccc;
+                    background: white;
+                    color: #333;
+                    box-shadow: none;
+                }
+
+                #bill h2 {
+                    margin-top: 0;
+                    font-size: 20px;
+                    color: #333;
+                    background: none;
+                }
+
+                #bill .bill-details {
+                    grid-template-columns: 1fr;
+                    background: none;
+                    border: none;
+                }
+
+                #bill .bill-details span {
+                    color: #333;
+                }
+
+                #bill table {
+                    background: none;
+                    box-shadow: none;
+                }
+
+                #bill th {
+                    background-color: #f2f2f2;
+                    color: #333;
+                }
+
+                #bill tr:hover {
+                    background-color: transparent;
+                }
+
+                #bill #total-amount {
+                    margin-top: 10px;
+                    font-size: 16px;
+                    color: #28a745;
+                }
+
+                #bill .bill-actions {
+                    display: none;
+                }
+            }
+        }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
 </head>
 <body>
     <div class="container">
-        <h1>Billing System</h1>
-        <form id="bill-form">
-            <input type="text" id="customer-name" placeholder="Customer Name" required>
-            <input type="text" id="phone-number" placeholder="Phone Number" required>
-            <input type="text" id="gst-number" placeholder="GST Number" required>
-            <input type="text" id="item" placeholder="Item Name" required>
-            <input type="number" id="price" placeholder="Price" required>
-            <input type="number" id="quantity" placeholder="Quantity" required>
-            <button type="submit">Add Item</button>
-        </form>
-        <div id="bill">
+        <h1>iDXD - Billing System</h1>
+        <div class="card" id="form-card">
+            <form id="bill-form">
+                <label for="customer-name">Customer Name</label>
+                <input type="text" id="customer-name" required aria-required="true">
+                <label for="phone-number">Phone Number</label>
+                <input type="tel" id="phone-number" pattern="[0-9]{10}" required aria-required="true" title="Enter a 10-digit phone number">
+                <label for="gst-number">GST Number (Optional)</label>
+                <input type="text" id="gst-number" pattern="[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[0-9A-Z]{1}Z[0-9A-Z]{1}" aria-required="false" title="Optional: Enter a valid 15-character GST number (e.g., 22ABCDE1234F1Z5)">
+                <label for="item">Item Name</label>
+                <input type="text" id="item" required aria-required="true">
+                <label for="price">Price (₹)</label>
+                <input type="number" id="price" min="0" step="0.01" required aria-required="true">
+                <label for="quantity">Quantity</label>
+                <input type="number" id="quantity" min="1" required aria-required="true">
+                <button type="submit" id="add-item-btn">Add Item</button>
+            </form>
+        </div>
+        <div class="card" id="bill">
             <h2>Bill</h2>
-            <p>Invoice No: <span id="invoice-number"></span></p>
-            <p>Date: <span id="invoice-date"></span></p>
-            <p>Customer Name: <span id="display-customer-name"></span></p>
-            <p>Phone Number: <span id="display-phone-number"></span></p>
-            <p>GST Number: <span id="display-gst-number"></span></p>
+            <div class="bill-details">
+                <p>Invoice No: <span id="invoice-number"></span></p>
+                <p>Date: <span id="invoice-date"></span></p>
+                <p>Customer Name: <span id="display-customer-name"></span></p>
+                <p>Phone Number: <span id="display-phone-number"></span></p>
+                <p>GST Number: <span id="display-gst-number"></span></p>
+            </div>
             <table>
                 <thead>
                     <tr>
@@ -133,148 +393,214 @@ th {
                         <th>Price</th>
                         <th>Quantity</th>
                         <th>Total</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody id="bill-items"></tbody>
             </table>
-            <h3 id="total-amount">Total: ₹0.00</h3>
-            <button id="print-button">Print Bill</button>
-            <button id="save-button">Save Bill</button>
-            <button id="reset-button">Reset Bill</button>
+            <h3 id="total-amount">Grand Total: ₹0.00</h3>
+            <div class="bill-actions">
+                <button id="print-button" aria-label="Print Bill">Print Bill</button>
+                <button id="save-button" aria-label="Save Bill">Save Bill</button>
+                <button id="reset-button" aria-label="Reset Bill">Reset Bill</button>
+                <button id="edit-customer-btn" aria-label="Edit Customer Details">Edit Customer Details</button>
+            </div>
+            <div id="message" class="message"></div>
         </div>
     </div>
     <script>
         let grandTotal = 0;
-let invoiceNumber = 1; // Starting invoice number
+        let invoiceNumber = Math.floor(Date.now() / 1000);
+        let customerDetailsSet = false;
+        let editingRow = null;
 
-document.getElementById('bill-form').addEventListener('submit', function(event) {
-    event.preventDefault();
+        const billForm = document.getElementById('bill-form');
+        const addItemBtn = document.getElementById('add-item-btn');
+        const messageDiv = document.getElementById('message');
 
-    const customerName = document.getElementById('customer-name').value;
-    const phoneNumber = document.getElementById('phone-number').value;
-    const gstNumber = document.getElementById('gst-number').value;
-    const item = document.getElementById('item').value;
-    const price = parseFloat(document.getElementById('price').value);
-    const quantity = parseInt(document.getElementById('quantity').value);
-    const total = price * quantity;
+        billForm.addEventListener('submit', function(event) {
+            event.preventDefault();
 
-    // Display customer details
-    document.getElementById('display-customer-name').innerText = customerName;
-    document.getElementById('display-phone-number').innerText = phoneNumber;
-    document.getElementById('display-gst-number').innerText = gstNumber;
+            const customerName = document.getElementById('customer-name').value.trim();
+            const phoneNumber = document.getElementById('phone-number').value.trim();
+            const gstNumber = document.getElementById('gst-number').value.trim();
+            const item = document.getElementById('item').value.trim();
+            const price = parseFloat(document.getElementById('price').value);
+            const quantity = parseInt(document.getElementById('quantity').value);
 
-    // Display invoice number and date
-    document.getElementById('invoice-number').innerText = invoiceNumber++;
-    document.getElementById('invoice-date').innerText = new Date().toLocaleString();
+            if (!document.getElementById('phone-number').checkValidity()) {
+                alert('Please enter a valid 10-digit phone number.');
+                return;
+            }
+            if (gstNumber && !document.getElementById('gst-number').checkValidity()) {
+                alert('Please enter a valid GST number (e.g., 22ABCDE1234F1Z5) or leave it blank.');
+                return;
+            }
+            if (price < 0 || quantity < 1) {
+                alert('Price cannot be negative and Quantity must be at least 1.');
+                return;
+            }
 
-    const billItems = document.getElementById('bill-items');
-    const newRow = document.createElement('tr');
+            const total = price * quantity;
 
-    newRow.innerHTML = `
-        <td>${item}</td>
-        <td>₹${price.toFixed(2)}</td> <!-- Changed $ to ₹ -->
-        <td>${quantity}</td>
-        <td>₹${total.toFixed(2)}</td> <!-- Changed $ to ₹ -->
-    `;
+            if (!customerDetailsSet) {
+                updateCustomerDetails(customerName, phoneNumber, gstNumber || 'N/A');
+                customerDetailsSet = true;
+            }
 
-    billItems.appendChild(newRow);
+            if (editingRow) {
+                const oldTotal = parseFloat(editingRow.cells[3].textContent.replace('₹', ''));
+                editingRow.cells[0].textContent = item;
+                editingRow.cells[1].textContent = `₹${price.toFixed(2)}`;
+                editingRow.cells[2].textContent = quantity;
+                editingRow.cells[3].textContent = `₹${total.toFixed(2)}`;
+                updateTotal(total - oldTotal);
+                resetItemFields();
+                editingRow = null;
+                addItemBtn.textContent = 'Add Item';
+            } else {
+                const billItems = document.getElementById('bill-items');
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td>${item}</td>
+                    <td>₹${price.toFixed(2)}</td>
+                    <td>${quantity}</td>
+                    <td>₹${total.toFixed(2)}</td>
+                    <td>
+                        <button class="action-btn edit-btn" aria-label="Edit Item">Edit</button>
+                        <button class="action-btn delete-btn" aria-label="Delete Item">Delete</button>
+                    </td>
+                `;
+                newRow.querySelector('.edit-btn').addEventListener('click', () => editItem(newRow));
+                newRow.querySelector('.delete-btn').addEventListener('click', () => deleteItem(newRow));
+                billItems.appendChild(newRow);
+                updateTotal(total);
+                resetItemFields();
+            }
+        });
 
-    updateTotal(total);
-    
-    // Clear the form
-    document.getElementById('bill-form').reset();
-});
+        function updateCustomerDetails(name, phone, gst) {
+            document.getElementById('display-customer-name').textContent = name;
+            document.getElementById('display-phone-number').textContent = phone;
+            document.getElementById('display-gst-number').textContent = gst;
+            document.getElementById('invoice-number').textContent = invoiceNumber;
+            document.getElementById('invoice-date').textContent = new Date().toLocaleString();
+        }
 
-// Update total amount
-function updateTotal(amount) {
-    grandTotal += amount;
-    document.getElementById('total-amount').innerText = `Total: ₹${(grandTotal).toFixed(2)}`; // Double the total and change $ to ₹
-}
+        function updateTotal(amount) {
+            grandTotal += amount;
+            grandTotal = parseFloat(grandTotal.toFixed(2));
+            document.getElementById('total-amount').textContent = `Grand Total: ₹${grandTotal.toFixed(2)}`;
+        }
 
-// Print functionality
-document.getElementById('print-button').addEventListener('click', function() {
-    const printContent = document.querySelector('.container').innerHTML;
-    const printWindow = window.open('', '', 'height=600,width=800');
-    printWindow.document.write('<html><head><title>Print Bill</title>');
-    printWindow.document.write('<link rel="stylesheet" href="styles.css">'); // Include CSS for print
-    printWindow.document.write('</head><body>');
-    printWindow.document.write(printContent.replace(/\$/g, '₹')); // Replace $ with ₹ in print content
-    printWindow.document.write('</body></html>');
-    printWindow.document.close();
-    printWindow.print();
-});
+        function resetItemFields() {
+            document.getElementById('item').value = '';
+            document.getElementById('price').value = '';
+            document.getElementById('quantity').value = '';
+        }
 
-// Save functionality
-document.getElementById('save-button').addEventListener('click', function() {
-    const billData = {
-        invoiceNumber: document.getElementById('invoice-number').innerText,
-        date: document.getElementById('invoice-date').innerText,
-        customerName: document.getElementById('display-customer-name').innerText,
-        phoneNumber: document.getElementById('display-phone-number').innerText,
-        gstNumber: document.getElementById('display-gst-number').innerText,
-        items: [],
-        total: grandTotal // Double the total for saving
-    };
+        function editItem(row) {
+            document.getElementById('item').value = row.cells[0].textContent;
+            document.getElementById('price').value = parseFloat(row.cells[1].textContent.replace('₹', ''));
+            document.getElementById('quantity').value = row.cells[2].textContent;
+            editingRow = row;
+            addItemBtn.textContent = 'Update Item';
+        }
 
-    const rows = document.querySelectorAll('#bill-items tr');
-    rows.forEach(row => {
-        const item = row.cells[0].innerText;
-        const price = parseFloat(row.cells[1].innerText.replace('₹', '')); // Changed $ to ₹
-        const quantity = parseInt(row.cells[2].innerText);
-        const total = parseFloat(row.cells[3].innerText.replace('₹', '')); // Changed $ to ₹
-        billData.items.push({ item, price, quantity, total });
-    });
+        function deleteItem(row) {
+            const total = parseFloat(row.cells[3].textContent.replace('₹', ''));
+            grandTotal -= total;
+            grandTotal = parseFloat(grandTotal.toFixed(2));
+            document.getElementById('total-amount').textContent = `Grand Total: ₹${grandTotal.toFixed(2)}`;
+            row.remove();
+        }
 
-    // Create a worksheet and workbook
-    const ws = XLSX.utils.json_to_sheet(billData.items.map(item => ({
-        Item: item.item,
-        Price: item.price,
-        Quantity: item.quantity,
-        Total: item.total
-    })));
+        document.getElementById('print-button').addEventListener('click', function() {
+            window.print();
+        });
 
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Bill Items');
+        document.getElementById('save-button').addEventListener('click', function() {
+            const billData = {
+                invoiceNumber: document.getElementById('invoice-number').textContent,
+                date: document.getElementById('invoice-date').textContent,
+                customerName: document.getElementById('display-customer-name').textContent,
+                phoneNumber: document.getElementById('display-phone-number').textContent,
+                gstNumber: document.getElementById('display-gst-number').textContent,
+                items: [],
+                total: grandTotal
+            };
 
-    // Add metadata
-    const metadata = {
-        InvoiceNumber: billData.invoiceNumber,
-        Date: billData.date,
-        CustomerName: billData.customerName,
-        PhoneNumber: billData.phoneNumber,
-        GSTNumber: billData.gstNumber,
-        Total: billData.total
-    };
+            document.querySelectorAll('#bill-items tr').forEach(row => {
+                const item = row.cells[0].textContent;
+                const price = parseFloat(row.cells[1].textContent.replace('₹', ''));
+                const quantity = parseInt(row.cells[2].textContent);
+                const total = parseFloat(row.cells[3].textContent.replace('₹', ''));
+                billData.items.push({ item, price, quantity, total });
+            });
 
-    const metadataSheet = XLSX.utils.json_to_sheet([metadata]);
-    XLSX.utils.book_append_sheet(wb, metadataSheet, 'Metadata');
+            try {
+                const ws = XLSX.utils.json_to_sheet(billData.items.map(item => ({
+                    Item: item.item,
+                    Price: item.price,
+                    Quantity: item.quantity,
+                    Total: item.total
+                })));
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, 'Bill Items');
 
-    // Save the workbook
-    XLSX.writeFile(wb, `Invoice_${billData.invoiceNumber}.xlsx`);
+                const metadata = {
+                    InvoiceNumber: billData.invoiceNumber,
+                    Date: billData.date,
+                    CustomerName: billData.customerName,
+                    PhoneNumber: billData.phoneNumber,
+                    GSTNumber: billData.gstNumber,
+                    Total: billData.total
+                };
+                const metadataSheet = XLSX.utils.json_to_sheet([metadata]);
+                XLSX.utils.book_append_sheet(wb, metadataSheet, 'Metadata');
 
-    // Reset the bill
-    resetBill();
-});
+                XLSX.writeFile(wb, `Invoice_${billData.invoiceNumber}.xlsx`);
+                messageDiv.textContent = 'Bill saved successfully!';
+                setTimeout(() => messageDiv.textContent = '', 3000);
+            } catch (error) {
+                alert('Error saving bill: ' + error.message);
+            }
+        });
 
-// Reset functionality
-document.getElementById('reset-button').addEventListener('click', function() {
-    resetBill();
-});
+        document.getElementById('reset-button').addEventListener('click', function() {
+            if (confirm('Are you sure you want to reset the bill? All data will be lost.')) {
+                resetBill();
+            }
+        });
 
-function resetBill() {
-    // Clear all displayed data
-    document.getElementById('display-customer-name').innerText = '';
-    document.getElementById('display-phone-number').innerText = '';
-    document.getElementById('display-gst-number').innerText = '';
-    document.getElementById('invoice-number').innerText = '';
-    document.getElementById('invoice-date').innerText = '';
-    document.getElementById('bill-items').innerHTML = '';
-    document.getElementById('total-amount').innerText = 'Total: ₹0.00'; // Changed $ to ₹
-    
-    // Reset totals
-    grandTotal = 0;
-    invoiceNumber = 1; 
-}
+        document.getElementById('edit-customer-btn').addEventListener('click', function() {
+            if (confirm('Edit customer details? This will update the bill header.')) {
+                customerDetailsSet = false;
+                updateCustomerDetails(
+                    document.getElementById('customer-name').value.trim(),
+                    document.getElementById('phone-number').value.trim(),
+                    document.getElementById('gst-number').value.trim() || 'N/A'
+                );
+                customerDetailsSet = true;
+            }
+        });
+
+        function resetBill() {
+            billForm.reset();
+            document.getElementById('display-customer-name').textContent = '';
+            document.getElementById('display-phone-number').textContent = '';
+            document.getElementById('display-gst-number').textContent = '';
+            document.getElementById('invoice-number').textContent = '';
+            document.getElementById('invoice-date').textContent = '';
+            document.getElementById('bill-items').innerHTML = '';
+            document.getElementById('total-amount').textContent = 'Total: ₹0.00';
+            grandTotal = 0;
+            customerDetailsSet = false;
+            invoiceNumber = Math.floor(Date.now() / 1000);
+            editingRow = null;
+            addItemBtn.textContent = 'Add Item';
+            messageDiv.textContent = '';
+        }
     </script>
 </body>
 </html>
